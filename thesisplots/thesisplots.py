@@ -1,61 +1,39 @@
-from argparse import ArgumentParser
 import matplotlib.pyplot as plt
 import os
 import runpy
-import types
+from typing import List, Callable
 
-from thesisplots import plots, readers
-from thesisplots.tools import modify_filename
-
-import ipdb
-
-parser = ArgumentParser()
-parser.add_argument('dataroot', help='Root folder where the data is stored')
-parser.add_argument('plotroot', help='Root folder where plot scripts are stored')
-args = parser.parse_args()
-
-paths = {'dataroot': args.dataroot, 'plotroot': args.plotroot}
-
-# ensure paths are absolute
-for key, value in paths.items():
-    if not os.path.isabs(value):
-        cwd = os.getcwd()
-        path = os.path.join(cwd, value)
-        paths[key] = path
+from thesisplots.tools import modify_filename, apply_dataroot, save_with_legend, save_no_legend
 
 
+def draw_single_image(
+        style: str,
+        ext: str,
+        plot_script: str,
+        dataroot: str,
+        plt_functs: List[Callable],
+        read_functs: List[Callable]):
 
-
-
-
-all_plot_functions = [plots.__dict__.get(a) for a in dir(plots)
-                      if isinstance(plots.__dict__.get(a), types.FunctionType) and not a.startswith('_')]
-
-all_reader_functions = [readers.__dict__.get(a) for a in dir(readers)
-                      if isinstance(readers.__dict__.get(a), types.FunctionType) and not a.startswith('_')]
-
-
-
-
-# da parallelizzare
-def draw_single_image(style, extension, plot_script):
     script_folder = os.path.dirname(plot_script)
     def decorate_all_plot_functions(prefix, extension):
         decorated = []
-        for function in all_plot_functions:
+        for function in plt_functs:
             decorated.append(modify_filename(function, script_folder, prefix, extension))
         return decorated
+    def decorate_all_reader_functs(functions):
+        applied = []
+        for f in functions:
+            applied.append(apply_dataroot(f, dataroot))
+        return applied
     plt.style.use(style)
-    decorated = decorate_all_plot_functions(style, extension)
-    decorated_globals = {f.__name__: f for f in decorated}
-    decorated_globals.update({f.__name__: f for f in all_reader_functions})
-    runpy.run_path(plot_script, init_globals=decorated_globals)
+    decorated_plots = decorate_all_plot_functions(style, ext)
+    decorated_plot_globals = {f.__name__: f for f in decorated_plots}
+    decorated_readers = decorate_all_reader_functs(read_functs)
+    decorated_reader_globals = {f.__name__: f for f in decorated_readers}
+    decorated_plot_globals.update(decorated_reader_globals)
+    decorated_plot_globals.update({'save_with_legend': save_with_legend, 'save_no_legend': save_no_legend })
+    runpy.run_path(plot_script, init_globals=decorated_plot_globals)
+    #(figure, axes, image_filename) = script_globals['img']
 
 
 
-draw_single_image('ggplot', 'pdf', '/home/davide/proveplot.py')
-draw_single_image('ggplot', 'png', '/home/davide/proveplot.py')
-
-
-# for style in styles:
-# draw()

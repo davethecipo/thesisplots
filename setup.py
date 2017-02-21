@@ -13,7 +13,7 @@ setup(name='thesisplots',
           'console_scripts': [
               'thplot = thesisplots.cli:main']
       },
-      install_requires=['numpy', 'matplotlib'],
+      install_requires=['numpy', 'matplotlib', 'appdirs'],
       tests_require=['pytest', 'pytest-cov'],
       extras_require={
           'dev': [ 'Sphinx' ]
