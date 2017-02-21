@@ -18,14 +18,15 @@ conf_dir = dirs.user_config_dir
 
 
 def print_info():
-    print('Program version: ', version)
+    print('thplot version: ', version)
     print('Supported image formats:')
     for elem in list(plt.gcf().canvas.get_supported_filetypes().keys()):
         print("\t{}".format(elem))
     print('Available styles:')
     for elem in plt.style.available:
         print("\t{}".format(elem))
-    print('Stylesheet directory: {}'.format(matplotlib.get_configdir()))
+    stylefolder = os.path.join(matplotlib.get_configdir(), 'stylelib')
+    print('Stylesheet directory: {}/stylelib'.format(stylefolder))
     print('Config directory: {}'.format(conf_dir))
 
 
