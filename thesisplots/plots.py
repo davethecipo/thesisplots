@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from typing import List, Type
 import matplotlib.pyplot as plt
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from collections import namedtuple
 from functools import wraps
 import numpy as np

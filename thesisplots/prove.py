@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from plots import dos_bands
 import matplotlib.pyplot as plt
 

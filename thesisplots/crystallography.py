@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from typing import List, Type
 from matplotlib import gridspec
 import matplotlib.pyplot as plt
