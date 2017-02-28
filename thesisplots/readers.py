@@ -55,7 +55,32 @@ def crystal14_bands(paths, dataroot, opts=None):
     return global_lines, x_tick_labels, x_tick_positions
 
 def crystal14_dos(path, dataroot):
+    print('INSIDE DOOOOOOS')
     print('received path ', path)
     print('dataroot', dataroot)
-    return path
+    fpath = os.path.join(dataroot, path, 'DOSS.DAT')
+    y, x = np.loadtxt(fpath, unpack=True, comments=['#', '@'])
+    return Series(x, y, legend=None, opts=None)
 
+def crystal_raman(path, dataroot, legend=None, opts=None):
+    if opts is None:
+        opts = {}
+    fname = os.path.join(dataroot, path, 'vib/rplots/raman.dat')
+    x, y = np.loadtxt(fname, unpack=True)
+    return Series(x, y, legend=legend, opts=opts)
+
+
+def iraman(path, dataroot, legend=None, opts=None):
+    if opts is None:
+        opts = {}
+    fname = os.path.join(dataroot, path, 'spectra/iraman.dat')
+    x, y = np.loadtxt(fname, unpack=True)
+    return Series(x, y, legend=legend, opts=opts)
+
+
+def expraman(filepath, dataroot, legend=None, opts=None):
+    if opts is None:
+        opts = {}
+    complete_path = os.path.join(dataroot, filepath)
+    x, y = np.loadtxt(complete_path, unpack=True)
+    return Series(x, y, legend=legend, opts=opts)

@@ -22,7 +22,7 @@ def compare_and_shift(setup_function, single_function, series: List[Type[Series]
     offset = 0
     for i, elem in enumerate(series):
         intensity = shift_up(normalize(elem.y), offset)
-        normalized_elem = Series(elem.x, intensity, elem.legend)
+        normalized_elem = Series(elem.x, intensity, elem.legend, opts=elem.opts)
         offset += 1
         single_function(axis, normalized_elem)
     return figure, axis
@@ -57,8 +57,8 @@ def modify_filename(function, basedir, name_prefix: str, extension: str):
 
 def apply_dataroot(function, dataroot):
     @wraps(function)
-    def inner(*args):
-        return function(*args, dataroot=dataroot)
+    def inner(*args, **kwargs):
+        return function(*args, **kwargs, dataroot=dataroot)
     return inner
 
 

@@ -60,12 +60,40 @@ The available commands are:
             description='Run a single script')
         # now that we're inside a subcommand, ignore the first
         # TWO argvs, ie the command and the subcommand
-        parser.add_argument('script', nargs=1,
-                            help='A thplot script')
+        parser.add_argument('script', help='A thplot script')
         parser.add_argument('dataroot', help='Root folder where the data is stored')
         parser.add_argument('--styles', help='Plot using these styles, overriding the config file')
         args = parser.parse_args(sys.argv[2:])
-        print(args)
+
+        paths = {'dataroot': args.dataroot}
+
+        for key, value in paths.items():
+            if not os.path.isabs(value):
+                cwd = os.getcwd()
+                path = os.path.join(cwd, value)
+                paths[key] = path
+
+        all_plot_functions = [plots.__dict__.get(a) for a in dir(plots)
+                              if isinstance(plots.__dict__.get(a), types.FunctionType) and not a.startswith('_')]
+
+        all_reader_functions = [readers.__dict__.get(a) for a in dir(readers)
+                                if isinstance(readers.__dict__.get(a), types.FunctionType) and not a.startswith('_')]
+
+        config = configparser.ConfigParser()
+        config.read(os.path.join(conf_dir, 'config.ini'))
+
+        def comma_separated_options(section, option):
+            return [e.strip() for e in config.get(section, option).split(',')]
+
+        styles = comma_separated_options('Styling', 'styles')
+        # TODO override if cli options is not empty
+        img_formats = comma_separated_options('Formats', 'extensions')
+
+        combinations = list(itertools.product(styles, img_formats))
+
+        # TODO profiling per vedere se si può parallelizzare
+        for (style, extension) in combinations:
+            draw_single_image(style, extension, args.script, paths['dataroot'], all_plot_functions, all_reader_functions)
 
     def execall(self):
         parser = ArgumentParser(

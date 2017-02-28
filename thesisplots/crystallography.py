@@ -16,7 +16,7 @@ def _setup_dos_bands():
 
 def dos_bands(bands_bundle, dos: Type[Series], image_filename: str):
     bands_segment, x_tick_labels, x_tick_positions = bands_bundle
-    print('dentro dos bands non decorata')
+
     figure, axes = _setup_dos_bands()
     [band_axis, dos_axis] = axes
     band_axis.set_xlim([bands_segment[0].x[0], bands_segment[0].x[-1]])
@@ -24,5 +24,7 @@ def dos_bands(bands_bundle, dos: Type[Series], image_filename: str):
         band_axis.plot(band.x, band.y, label=band.legend, *band.opts)
     band_axis.set_xticks(x_tick_positions)
     band_axis.set_xticklabels(x_tick_labels)
-    print('FFFFFFFFFFFFFFFFFFF function dos_bands receives file variable', image_filename)
+
+    dos_axis.plot(dos.x, dos.y)
+
     return (figure, axes, image_filename)
