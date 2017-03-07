@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from thesisplots.tools import Series
 
 def _setup_dos_bands():
-    figure = plt.figure()
+    figure = plt.figure(figsize=(4, 5))
     gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])
     bands_ax, dos_ax = plt.subplot(gs[0]), plt.subplot(gs[1])
     bands_ax.set_ylabel('Energy [Hartree]')
