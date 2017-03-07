@@ -1,9 +1,13 @@
 from __future__ import absolute_import
 
 from typing import List, Type
+
 import matplotlib.pyplot as plt
 
+from thesisplots.crystallography import (bands_2_dos, dos_bands, dos_only,
+                                         dos_only_correct)
+from thesisplots.spectroscopy import (ir_compare, raman, raman_compare,
+                                      raman_overtones)
 from thesisplots.tools import Series
-from thesisplots.spectroscopy import raman, raman_compare, ir_compare
-from thesisplots.crystallography import dos_bands
 
+# TODO non dovrebbe essere necessario indicare le funzioni

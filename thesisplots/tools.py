@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
+import os
 from collections import namedtuple
 from functools import wraps
-import numpy as np
-import os
 from typing import List, Type
 
+import numpy as np
 
 Series = namedtuple('Series', ['x', 'y', 'legend', 'opts'], verbose=False)
 
@@ -27,6 +27,8 @@ def compare_and_shift(setup_function, single_function, series: List[Type[Series]
         normalized_elem = Series(elem.x, intensity, elem.legend, opts=elem.opts)
         offset += 1
         single_function(axis, normalized_elem)
+    axis.set_ylim([-0.02, offset*1.02])
+    axis.set_yticklabels([])
     return figure, axis
 
 
@@ -64,5 +66,5 @@ def apply_dataroot(function, dataroot):
     return inner
 
 
-def single_series_plot(axis, shift: Type[Series]):
-    axis.plot(shift.x, shift.y, label=shift.legend, **shift.opts)
+def single_series_plot(axis, shift: Type[Series], scalex=1):
+    axis.plot(shift.x*scalex, shift.y, label=shift.legend, **shift.opts)
