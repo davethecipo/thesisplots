@@ -37,6 +37,8 @@ def ir_compare(series: List[Type[Series]], image_filename: str):
     figure, axis = compare_and_shift(_setup_ir, single_series_plot, series)
     return (figure, axis, image_filename)
 
+def debug_stack(figure):
+    plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=True)
 
 def _setup_vertical_panels(number_of_panels, gridspec_kw):
     #figure, axes = plt.subplots(number_of_panels)
@@ -77,7 +79,7 @@ def set_shared_ylabel(figure, a, ylabel, labelpad = 0.01):
     a[-1].yaxis.set_label_coords(tick_label_left - labelpad,(bottom + top)/2, transform=figure.transFigure)
 
 
-def raman_overtones(series, interval_start, panels_number, scalex, image_filename):
+def raman_overtones(series, interval_start, panels_number, scalex, image_filename, debug_stacking=False):
     """Represent the Raman spectrum with a vertical stack in order to see the overtones
     
     series: the data to plot
@@ -85,8 +87,14 @@ def raman_overtones(series, interval_start, panels_number, scalex, image_filenam
     panels_number (int): how many panels to stack
     scalex (float): scale the x values by this amount
     image_filename (str): the name for the image file
+    debug_stacking (bool): if True, plot ticks and labels for each panel
     """
-    figure, axes = _setup_vertical_panels(panels_number, gridspec_kw={'hspace':0})
+    gridspec_kw={'hspace':0}
+    if debug_stacking:
+        gridspec_kw={'hspace':1}
+    figure, axes = _setup_vertical_panels(panels_number, gridspec_kw=gridspec_kw)
+    if debug_stacking:
+        debug_stack(figure)
     figure.set_size_inches((4, 4))
     #figure.set_tight_layout(True)
     #figure.subplots_adjust(hspace=0)
