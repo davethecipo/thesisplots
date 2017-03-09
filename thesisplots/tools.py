@@ -11,8 +11,10 @@ Series = namedtuple('Series', ['x', 'y', 'legend', 'opts'], verbose=False)
 
 
 def normalize(vec):
+    """Normalize in order to have the minimum value set to 0 and the maximum to 1"""
     maximum = np.max(vec)
-    return np.array([elem / maximum for elem in vec])
+    minimum = np.min(vec)
+    return np.array([(elem - minimum)/(maximum - minimum) for elem in vec])
 
 
 def shift_up(data, how_much):
@@ -22,7 +24,7 @@ def shift_up(data, how_much):
 def compare_and_shift(setup_function, single_function, series: List[Type[Series]]):
     figure, axis = setup_function()
     offset = 0
-    for i, elem in enumerate(series):
+    for elem in series:
         intensity = shift_up(normalize(elem.y), offset)
         normalized_elem = Series(elem.x, intensity, elem.legend, opts=elem.opts)
         offset += 1
@@ -31,7 +33,7 @@ def compare_and_shift(setup_function, single_function, series: List[Type[Series]
     axis.set_yticklabels([])
     return figure, axis
 
-
+# TODO save methods belong to an object!
 def save_no_legend(information):
     (fig, axis, file) = information
     fig.savefig(file, bbox_inches='tight')
@@ -50,7 +52,8 @@ def save_with_legend(information):
 def modify_filename(function, basedir, name_prefix: str, extension: str):
     @wraps(function)
     def inner(*args, **kwargs):
-        name_arg = kwargs['image_filename']  # the value of the dict element gets copied to a new variable
+        # the value of the dict element gets copied to a new variable
+        name_arg = kwargs['image_filename']
         name_arg = "{}-{}.{}".format(name_prefix, name_arg, extension)
         name_arg = os.path.join(basedir, name_arg)
         kwargs['image_filename'] = name_arg  # put the new value back into the dict

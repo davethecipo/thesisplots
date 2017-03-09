@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from thesisplots.tools import Series
 
 def _setup_dos():
-    figure = plt.figure()
+    figure = plt.figure(figsize=(4, 5))
     gs = gridspec.GridSpec(1, 1)
     bands_ax = plt.subplot(gs[0])
     bands_ax.set_ylabel('Energy [Hartree]')
@@ -18,8 +18,8 @@ def _setup_dos():
     return figure, bands_ax
 
 def _setup_dos_bands():
-    figure = plt.figure(figsize=(4, 5))
-    gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])
+    figure = plt.figure()
+    gs = gridspec.GridSpec(1, 2, width_ratios=[3, 3])
     bands_ax, dos_ax = plt.subplot(gs[0]), plt.subplot(gs[1])
     bands_ax.set_ylabel('Energy [Hartree]')
     bands_ax.set_title('Band structure')
@@ -32,7 +32,7 @@ def _setup_dos_bands():
 
 def _setup_2_dos_bands():
     figure = plt.figure()
-    gs = gridspec.GridSpec(1, 3, width_ratios=[3, 1, 1])
+    gs = gridspec.GridSpec(1, 3, width_ratios=[3, 2, 2])
     bands_ax, dos1_ax, dos2_ax = [plt.subplot(gs[0]), plt.subplot(gs[1]), plt.subplot(gs[2])]
     bands_ax.set_ylabel('Energy [Hartree]')
     bands_ax.set_title('Band structure')
