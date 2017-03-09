@@ -38,9 +38,9 @@ def ir_compare(series: List[Type[Series]], image_filename: str):
     return (figure, axis, image_filename)
 
 
-def _setup_vertical_panels(number_of_panels):
+def _setup_vertical_panels(number_of_panels, gridspec_kw):
     #figure, axes = plt.subplots(number_of_panels)
-    figure, axes = plt.subplots(number_of_panels, gridspec_kw={'hspace':0})
+    figure, axes = plt.subplots(number_of_panels, gridspec_kw=gridspec_kw)
     plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=False)
     return figure, axes
 
@@ -86,7 +86,7 @@ def raman_overtones(series, interval_start, panels_number, scalex, image_filenam
     scalex (float): scale the x values by this amount
     image_filename (str): the name for the image file
     """
-    figure, axes = _setup_vertical_panels(panels_number)
+    figure, axes = _setup_vertical_panels(panels_number, gridspec_kw={'hspace':0})
     figure.set_size_inches((4, 4))
     #figure.set_tight_layout(True)
     #figure.subplots_adjust(hspace=0)
