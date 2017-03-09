@@ -39,9 +39,9 @@ def ir_compare(series: List[Type[Series]], image_filename: str):
 
 
 def _setup_vertical_panels(number_of_panels):
-    figure, axes = plt.subplots(number_of_panels)
-    #figure, axes = plt.subplots(number_of_panels, gridspec_kw={'hspace':0})
-    #plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=False)
+    #figure, axes = plt.subplots(number_of_panels)
+    figure, axes = plt.subplots(number_of_panels, gridspec_kw={'hspace':0})
+    plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=False)
     return figure, axes
 
 
@@ -77,26 +77,27 @@ def set_shared_ylabel(figure, a, ylabel, labelpad = 0.01):
     a[-1].yaxis.set_label_coords(tick_label_left - labelpad,(bottom + top)/2, transform=figure.transFigure)
 
 
-def raman_overtones(series, interval, panels_number, scalex, image_filename):
+def raman_overtones(series, interval_start, panels_number, scalex, image_filename):
     """Represent the Raman spectrum with a vertical stack in order to see the overtones
     
     series: the data to plot
-    interval (list): the extremes for the first panel
+    interval (int): the initial value
     panels_number (int): how many panels to stack
     scalex (float): scale the x values by this amount
     image_filename (str): the name for the image file
     """
     figure, axes = _setup_vertical_panels(panels_number)
+    figure.set_size_inches((4, 4))
+    #figure.set_tight_layout(True)
     #figure.subplots_adjust(hspace=0)
-    
     for i in range(panels_number): # start at top and go down
-        minimum, maximum = interval
-        minimum = interval[0]*(2**i)
-        maximum = interval[1]*(2**i)
+        minimum = interval_start
+        minimum = minimum*(2**i)
+        maximum = 2*minimum
         axis_number = panels_number - i - 1
         axes[axis_number].set_xlim([minimum, maximum])
         single_series_plot(axes[axis_number], series, scalex)
-        #axes[axis_number].set_yticks([])
+        axes[axis_number].set_yticks([])
     plt.xlabel('Raman shift [$cm^{-1}$]')
     set_shared_ylabel(figure, axes, 'Intensity [A.U]')
     return (figure, axes, image_filename)
