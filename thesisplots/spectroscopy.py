@@ -77,19 +77,24 @@ def set_shared_ylabel(figure, a, ylabel, labelpad = 0.01):
     a[-1].yaxis.set_label_coords(tick_label_left - labelpad,(bottom + top)/2, transform=figure.transFigure)
 
 
-def raman_overtones(series, interval, scalex, image_filename):
-    max_x = np.max(series.x)
-    number_of_panels = int(np.ceil(max_x/interval[1]))
-    print(number_of_panels)
-    figure, axes = _setup_vertical_panels(number_of_panels)
-    figure.subplots_adjust(hspace=0)
-    plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=False)
-    for i in range(number_of_panels): # start top and go down
-        min, max = interval
-        min += interval[1]*i
-        max += interval[1]*i
-        axis_number = number_of_panels - i - 1
-        axes[axis_number].set_xlim([min, max])
+def raman_overtones(series, interval, panels_number, scalex, image_filename):
+    """Represent the Raman spectrum with a vertical stack in order to see the overtones
+    
+    series: the data to plot
+    interval (list): the extremes for the first panel
+    panels_number (int): how many panels to stack
+    scalex (float): scale the x values by this amount
+    image_filename (str): the name for the image file
+    """
+    figure, axes = _setup_vertical_panels(panels_number)
+    #figure.subplots_adjust(hspace=0)
+    
+    for i in range(panels_number): # start at top and go down
+        minimum, maximum = interval
+        minimum = interval[0]*(2**i)
+        maximum = interval[1]*(2**i)
+        axis_number = panels_number - i - 1
+        axes[axis_number].set_xlim([minimum, maximum])
         single_series_plot(axes[axis_number], series, scalex)
         #axes[axis_number].set_yticks([])
     plt.xlabel('Raman shift [$cm^{-1}$]')
