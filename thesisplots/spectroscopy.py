@@ -39,7 +39,9 @@ def ir_compare(series: List[Type[Series]], image_filename: str):
 
 
 def _setup_vertical_panels(number_of_panels):
-    figure, axes = plt.subplots(number_of_panels, gridspec_kw={'hspace':0})
+    figure, axes = plt.subplots(number_of_panels)
+    #figure, axes = plt.subplots(number_of_panels, gridspec_kw={'hspace':0})
+    #plt.setp([a.get_xticklabels() for a in figure.axes[:-1]], visible=False)
     return figure, axes
 
 
