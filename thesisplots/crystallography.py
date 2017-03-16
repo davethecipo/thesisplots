@@ -54,11 +54,11 @@ def dos_bands(bands_bundle, dos: Type[Series], e_fermi, image_filename: str):
     [band_axis, dos_axis] = axes
     band_axis.set_xlim([bands[0].x[0], bands[0].x[-1]])
     for band in bands:
-        band_axis.plot(band.x, band.y+e_fermi, label=band.legend, *band.opts)
+        band_axis.plot(band.x, band.y+e_fermi, label=band.legend, color='black', linestyle='-')
     band_axis.set_xticks(x_tick_positions)
     band_axis.set_xticklabels(x_tick_labels)
 
-    dos_axis.plot(dos.x, dos.y)
+    dos_axis.plot(dos.x, dos.y, color='black')
     band_axis.axhline(e_fermi, ls='-.', color='black')
     dos_axis.axhline(e_fermi, ls='-.', color='black')
 
@@ -72,13 +72,12 @@ def bands_2_dos(bands_bundle, dos1, dos2, e_fermi, image_filename):
     [band_axis, dos1_axis, dos2_axis] = axes
     band_axis.set_xlim([bands[0].x[0], bands[0].x[-1]])
     for band in bands:
-        band_axis.plot(band.x, band.y+e_fermi, label=band.legend, *band.opts)
+        band_axis.plot(band.x, band.y+e_fermi, color='black', linestyle='-')
     band_axis.set_xticks(x_tick_positions)
     band_axis.set_xticklabels(x_tick_labels)
 
-    dos1_axis.plot(dos1.x, dos1.y)
-    print(dos1.y)
-    dos2_axis.plot(dos2.x, dos2.y)
+    dos1_axis.plot(dos1.x, dos1.y, color='black')
+    dos2_axis.plot(dos2.x, dos2.y, color='black')
 
     band_axis.axhline(e_fermi, ls='-.', color='black')
     dos1_axis.axhline(e_fermi, ls='-.', color='black')
@@ -95,7 +94,7 @@ def dos_only(bands_bundle, e_fermi, image_filename: str):
     band_axis = axes
     band_axis.set_xlim([bands[0].x[0], bands[0].x[-1]])
     for band in bands:
-        band_axis.plot(band.x, band.y+e_fermi, label=band.legend, *band.opts)
+        band_axis.plot(band.x, band.y+e_fermi, label=band.legend, color='black', linestyle='-')
     band_axis.set_xticks(x_tick_positions)
     band_axis.set_xticklabels(x_tick_labels)
     band_axis.axhline(e_fermi, ls='-.', color='black')
@@ -109,8 +108,36 @@ def dos_only_correct(bands_bundle, e_fermi, image_filename: str):
     band_axis = axes
     band_axis.set_xlim([bands[0].x[0], bands[0].x[-1]])
     for band in bands:
-        band_axis.plot(band.x, band.y, label=band.legend, *band.opts)
+        band_axis.plot(band.x, band.y, label=band.legend, color='black', linestyle='-')
     band_axis.set_xticks(x_tick_positions)
     band_axis.set_xticklabels(x_tick_labels)
     band_axis.axhline(e_fermi, ls='-.', color='black')
     return (figure, axes, image_filename)
+
+
+def huckel_and_crystal(huckel_bands, crystal14_bundle, e_fermi, image_filename):
+    crystal_bands, x_tick_labels, x_tick_positions = crystal14_bundle
+    cry14_min = crystal_bands[0].x[0]
+    cry14_max = crystal_bands[0].x[-1]
+
+    # rescale ticks positions from 0 to 1
+    x_tick_positions = x_tick_positions/cry14_max
+
+    figure, axes = _setup_dos()
+    band_axis = axes
+    band_axis.set_xlim([0, 1])
+    for band in crystal_bands:
+        band_axis.plot(band.x/cry14_max, band.y, label='Crystal 14', linestyle='-', color='black', linewidth=0.4)
+    
+    import ipdb
+    #ipdb.set_trace()
+    huckel_min = huckel_bands[0].x[0]
+    huckel_max = huckel_bands[0].x[-1]
+    for band in huckel_bands:
+        # rescale x
+        band_axis.plot(band.x/huckel_max, band.y, label='Huckel', linestyle=':', color='red')
+    band_axis.set_xticks(x_tick_positions)
+    band_axis.set_xticklabels(x_tick_labels)
+    band_axis.axhline(e_fermi, ls='-.', color='black')
+    return (figure, axes, image_filename)
+    

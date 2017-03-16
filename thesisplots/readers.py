@@ -52,7 +52,7 @@ def column_bands(paths, dataroot, opts=None):
     total = np.vstack(mapazzoni)
     bands_number = len(total[0, :])
     length = len(total[:, 0])
-    x = list(range(length))
+    x = np.array(list(range(length)))
     for band in range(0, bands_number):
         data = Series(x, total[:, band], legend=band, opts=opts)
         global_lines.append(data)
@@ -129,7 +129,7 @@ def iraman(path, dataroot,  scale_freq=0.98, legend=None, opts=None):
     x, y = np.loadtxt(fname, unpack=True)
     return Series(x*scale_freq, y, legend=legend, opts=opts)
 
-
+# TODO rename to more general (e.g I use it also for bond length data)
 def expraman(filepath, dataroot, columns, legend=None, opts=None):
     """start counting columns from 1"""
     if opts is None:
