@@ -76,8 +76,9 @@ def crystal14_bands(paths, dataroot, opts=None):
 
     #pdb.set_trace()
 
-
+    previous_length = 0
     for i, mapazzone in enumerate(mapazzoni):
+        
         if i==0: # don't add offset for the first
             # first path: specify both extreme xticks labels
             should_be_both_ticks = paths[i]['ticks']
@@ -86,8 +87,7 @@ def crystal14_bands(paths, dataroot, opts=None):
                 sys.exit(1)
             x_tick_labels.append(should_be_both_ticks[0])
             x_tick_labels.append(should_be_both_ticks[1])
-            x_tick_positions.append(mapazzone[0, 0])
-            x_tick_positions.append(mapazzone[-1, 0])
+            x_tick_positions.append(0)
         if i!=0:
             x_offset = mapazzoni[i-1][-1, 0]
             mapazzone[:, 0] += x_offset
@@ -97,12 +97,16 @@ def crystal14_bands(paths, dataroot, opts=None):
                 logger.error('You should specify one k-point label for all the segments but the first, exiting')
                 sys.exit(1)
             x_tick_labels.append(*tick_list)
-            x_tick_positions.append(mapazzone[-1, 0])
+        previous_length += len(mapazzone[:, 0])
+        ipdb.set_trace()
+        x_tick_positions.append(previous_length)
     total = np.vstack(mapazzoni)
     bands_number = len(total[0,1:])
-    print(bands_number)
+    #print(bands_number)
+    length = len(total[:, 0])
+    x = np.array(list(range(length)))
     for band in range(1, bands_number+1):
-        data = Series(total[:, 0], total[:, band], legend=band, opts=opts)
+        data = Series(x, total[:, band], legend=band, opts=opts)
         global_lines.append(data)
     return global_lines, x_tick_labels, x_tick_positions
 

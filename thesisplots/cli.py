@@ -120,7 +120,7 @@ The available commands are:
         all_reader_functions = [readers.__dict__.get(a) for a in dir(readers)
                                 if isinstance(readers.__dict__.get(a), types.FunctionType) and not a.startswith('_')]
 
-        print('reader functions DDDDDDDDDDDDDDDDDDDDDD, ', all_reader_functions)
+        #print('reader functions DDDDDDDDDDDDDDDDDDDDDD, ', all_reader_functions)
 
         config = configparser.ConfigParser()
         config.read(os.path.join(conf_dir, 'config.ini'))
