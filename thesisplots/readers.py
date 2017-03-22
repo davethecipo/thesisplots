@@ -98,7 +98,7 @@ def crystal14_bands(paths, dataroot, opts=None):
                 sys.exit(1)
             x_tick_labels.append(*tick_list)
         previous_length += len(mapazzone[:, 0])
-        ipdb.set_trace()
+        #ipdb.set_trace()
         x_tick_positions.append(previous_length)
     total = np.vstack(mapazzoni)
     bands_number = len(total[0,1:])
