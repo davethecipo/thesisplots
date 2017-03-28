@@ -5,7 +5,7 @@ import os
 import runpy
 from typing import List, Callable
 
-from thesisplots.tools import modify_filename, apply_dataroot, save_with_legend, save_no_legend
+from thesisplots.tools import modify_filename, apply_dataroot, save_with_legend, save_no_legend, Series, normalize
 
 
 def draw_single_image(
@@ -34,6 +34,7 @@ def draw_single_image(
     decorated_reader_globals = {f.__name__: f for f in decorated_readers}
     decorated_plot_globals.update(decorated_reader_globals)
     decorated_plot_globals.update({'save_with_legend': save_with_legend, 'save_no_legend': save_no_legend })
+    decorated_plot_globals.update({'Series': Series, 'normalize': normalize})
     runpy.run_path(plot_script, init_globals=decorated_plot_globals)
     #(figure, axes, image_filename) = script_globals['img']
 
