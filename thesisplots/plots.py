@@ -9,6 +9,6 @@ from thesisplots.crystallography import (bands_2_dos, dos_bands, dos_only,
 from thesisplots.spectroscopy import (ir_compare, raman, raman_compare,
                                       raman_overtones)
 from thesisplots.generic import compare_bond_length
-from thesisplots.tools import Series
+from thesisplots.tools import *
 
 # TODO non dovrebbe essere necessario indicare le funzioni
