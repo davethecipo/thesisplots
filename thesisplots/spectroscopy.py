@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from typing import List, Type
 
 from thesisplots.tools import single_series_plot
-from thesisplots.tools import Series, compare_and_shift
+from thesisplots.tools import Series, compare_and_shift, compare_superimpose
 
 
 def _setup_raman():
@@ -32,6 +32,9 @@ def raman_compare(series: List[Type[Series]], image_filename: str):
     figure, axis = compare_and_shift(_setup_raman, single_series_plot, series)
     return (figure, axis, image_filename)
 
+def raman_compare_overlapped(series: List[Type[Series]], image_filename: str):
+    figure, axis = compare_superimpose(_setup_raman, single_series_plot, series)
+    return (figure, axis, image_filename)
 
 def ir_compare(series: List[Type[Series]], image_filename: str):
     figure, axis = compare_and_shift(_setup_ir, single_series_plot, series)

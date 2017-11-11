@@ -27,9 +27,9 @@ def compare_superimpose(setup_function, single_function, series: List[Type[Serie
         intensity = normalize(elem.y)
         normalized_elem = Series(elem.x, intensity, elem.legend, opts=elem.opts)
         single_function(axis, normalized_elem)
+    axis.set_ylim([-0.02, 1.02])
     axis.set_yticklabels([])
     return figure, axis    
-
 
 def compare_and_shift(setup_function, single_function, series: List[Type[Series]]):
     figure, axis = setup_function()
